@@ -1,4 +1,4 @@
-package org.iotashan.model
+package org.iotashan.vos
 {
 	[RemoteClass(alias="model.User")]
 
