@@ -1,4 +1,4 @@
-package org.iotashan.control
+package org.iotashan.business
 {
 	public class ErrorManager
 	{
@@ -13,14 +13,8 @@ package org.iotashan.control
 			var vMessage:ErrorMessage = event.message as ErrorMessage;
 			var myAlert:Alert
 			
-			// just display the error for now, we'll sort out error codes later
+			// just display the error
 			myAlert = Alert.show(event.fault.faultDetail,event.fault.faultString);
 		}
-
-        private static function alertListener(eventObj:CloseEvent):void {
-            // Check to see if the OK button was pressed, then reload the application.
-			var request:URLRequest = new URLRequest("javascript:reloadPage()");
-			navigateToURL(request,"_self");
-        }
 	}
 }

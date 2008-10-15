@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" xmlns:view="org.iotashan.view.*">
-	<mx:Script>
-		<![CDATA[
-			private function doCreateAccount():void {
-				mainStack.selectedChild = createAccountScreen;
-			}
-			private function doLogOut():void {
-				mainStack.selectedChild = loginScreen;
-			}
-			private function doWelcomeScreen():void {
-				mainStack.selectedChild = createAccountScreen;
-			}
-		]]>
-	</mx:Script>
-	<mx:ViewStack id="mainStack" width="100%" height="100%">
-		<view:Login id="loginScreen" onCreateAccount="doCreateAccount()"/>
-		<view:CreateAccount id="createAccountScreen"/>
-		<view:Welcome id="welcomeScreen"/>
-	</mx:ViewStack>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:views="org.iotashan.views.*" xmlns:maps="org.iotashan.maps.*" layout="vertical" xmlns:view="org.iotashan.view.*">
+	<maps:MainEventMap/>
+	<maps:ModelMap/>
+	
+	<views:MainUI/>
 </mx:Application>
