@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EventMap xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="http://mate.asfusion.com/">
+	<mx:Script>
+		<![CDATA[
+			import com.asfusion.mate.core.*;
+			import org.iotashan.events.*;
+		]]>
+	</mx:Script>
+	
+	<!-- Login/Logout events -->
+	<EventHandlers type="{LoginEvent.LOGIN}">
+		<!-- call the remoting service -->
+		<RemoteObjectInvoker source="model.UserGateway" method="tryLogin" destination="ColdFusion" showBusyCursor="true" arguments="{[event.username,event.password]}">
+			<resultHandlers>
+				<ServiceResponseAnnouncer type="result"/>
+			</resultHandlers>
+			<faultHandlers>
+				<ServiceResponseAnnouncer type="fault"/>
+			</faultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+</EventMap>
