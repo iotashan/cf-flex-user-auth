@@ -28,7 +28,7 @@
 		<cfargument name="targetPage" type="string" required="true"/>
 		
 		<cfscript>
-			REQUEST.dsn = "testDSN";
+			REQUEST.dsn = "mousebreeder";
 			REQUEST.secretKey = "ChangeThisKeyForPasswordEncryption";
 		</cfscript>
 		
@@ -41,9 +41,9 @@
 		<cfargument name="targetPage" type="string" required="true"/>
 	</cffunction>
 	
-	<!--- set output="true" if you want to output an error from here --->
+	<!--- set output="true" if you want to output an error from here
 	<cffunction name="onError" output="false" returnType="void">
 		<cfargument name="exception" required="true"/>
 		<cfargument name="eventName" type="string" required="true"/>
-	</cffunction>
+	</cffunction> --->
 </cfcomponent>
