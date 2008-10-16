@@ -5,7 +5,7 @@
 		<cfset var qRead="">
 		<cfset var obj="">
 
-		<cfquery name="qRead" datasource="testDSN">
+		<cfquery name="qRead" datasource="#REQUEST.dsn#">
 			select 	UserID, email, password, verificationCode
 			from users
 			where UserID = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.id#" />
@@ -25,7 +25,7 @@
 		<cfargument name="bean" required="true" type="model.User">
 
 		<!--- try logging in --->
-		<cfquery name="qLogin" datasource="testDSN">
+		<cfquery name="qLogin" datasource="#REQUEST.dsn#">
 			SELECT userID
 			FROM users
 			WHERE email = <cfqueryparam cfsqltype="cf_sql_varchar" value="#ARGUMENTS.bean.email#">
@@ -46,7 +46,7 @@
 		<cfset var local3=arguments.bean.getverificationCode()>
 
 		<cftransaction isolation="read_committed">
-			<cfquery name="qCreate" datasource="testDSN">
+			<cfquery name="qCreate" datasource="#REQUEST.dsn#">
 				insert into users(email, password, verificationCode)
 				values (
 					<cfqueryparam value="#local1#" cfsqltype="CF_SQL_VARCHAR" />,
@@ -56,7 +56,7 @@
 			</cfquery>
 
 			<!--- If your server has a better way to get the ID that is more reliable, use that instead --->
-			<cfquery name="qGetID" datasource="testDSN">
+			<cfquery name="qGetID" datasource="#REQUEST.dsn#">
 				select UserID
 				from users
 				where email = <cfqueryparam value="#local1#" cfsqltype="CF_SQL_VARCHAR" />
@@ -78,7 +78,7 @@
 		<cfargument name="bean" required="true" type="model.User">
 		<cfset var qUpdate="">
 
-		<cfquery name="qUpdate" datasource="testDSN" result="status">
+		<cfquery name="qUpdate" datasource="#REQUEST.dsn#" result="status">
 			update users
 			set email = <cfqueryparam value="#arguments.bean.getemail()#" cfsqltype="CF_SQL_VARCHAR" />,
 				password = <cfqueryparam value="#arguments.bean.getpassword()#" cfsqltype="CF_SQL_VARCHAR" />,
@@ -94,7 +94,7 @@
 		<cfargument name="bean" required="true" type="model.User">
 		<cfset var qDelete="">
 
-		<cfquery name="qDelete" datasource="testDSN" result="status">
+		<cfquery name="qDelete" datasource="#REQUEST.dsn#" result="status">
 			delete
 			from users
 			where UserID = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.bean.getUserID()#" />

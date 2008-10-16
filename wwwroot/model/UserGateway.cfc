@@ -1,6 +1,6 @@
 <cfcomponent output="false">
 
-	<cffunction name="tryLogin" output="false" access="remote">
+	<cffunction name="tryLogin" output="false" access="remote" returntype="model.User">
 		<cfargument name="obj" type="model.User" required="true" />
  		
 		<cfscript>
@@ -23,13 +23,13 @@
 		</cfscript>
 	</cffunction>
 
-	<cffunction name="getById" output="false" access="remote">
+	<cffunction name="getById" output="false" access="remote" returntype="model.User">
 		<cfargument name="id" type="numeric" required="true" />
  		<cfreturn createObject("component", "UserDAO").read(arguments.id)>
 	</cffunction>
 
 
-	<cffunction name="save" output="false" access="remote">
+	<cffunction name="save" output="false" access="remote" returntype="model.User">
 		<cfargument name="obj" type="model.User" required="true" />
  		<cfscript>
 			if( obj.getUserID() eq 0 )
@@ -42,7 +42,7 @@
 	</cffunction>
 
 
-	<cffunction name="deleteById" output="false" access="remote">
+	<cffunction name="deleteById" output="false" access="remote" returntype="void">
 		<cfargument name="id" type="numeric" required="true" />
 		<cfset var obj = getById(arguments.id)>
 		<cfset createObject("component", "UserDAO").delete(obj)>
@@ -55,7 +55,7 @@
 		<cfset var obj="">
 		<cfset var ret=arrayNew(1)>
 
-		<cfquery name="qRead" datasource="testDSN">
+		<cfquery name="qRead" datasource="#REQUEST.dsn#">
 			SELECT UserID
 			FROM users
 		</cfquery>
@@ -76,7 +76,7 @@
 
 		<cfset var qRead="">
 
-		<cfquery name="qRead" datasource="testDSN">
+		<cfquery name="qRead" datasource="#REQUEST.dsn#">
 			SELECT #arguments.fieldList#
 			FROM users
 		</cfquery>
