@@ -8,6 +8,7 @@ package org.iotashan.events {
 		public static const LOGIN:String = "loginEvent";
 		public static const LOGOUT:String = "logoutEvent";
 		public static const LOGIN_SUCCESSFUL:String = "loginSuccessfulEvent";
+		public static const LOGIN_UNSUCCESSFUL:String = "loginUnsuccessfulEvent";
 		
 		// Properties
 		public var user:User;

@@ -3,6 +3,7 @@
 	<mx:Script>
 		<![CDATA[
 			import com.asfusion.mate.core.*;
+			import com.asfusion.mate.events.UnhandledFaultEvent;
 			import org.iotashan.business.*;
 			import org.iotashan.events.*;
 			import org.iotashan.views.*
@@ -11,13 +12,22 @@
 	
 	<Debugger level="{Debugger.ALL}" />
 	
+	<!-- unhandled faults -->
+	<EventHandlers type="{UnhandledFaultEvent.FAULT}">
+		<MethodInvoker generator="{ErrorManager}" method="remoteError" arguments="{event}"/>
+	</EventHandlers>
+	
 	<!-- Login/Logout events -->
 	<EventHandlers type="{LoginEvent.LOGIN}" debug="true">
 		<!-- call the remoting service -->
 		<RemoteObjectInvoker source="model.UserGateway" method="tryLogin" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}" debug="true">
 			<resultHandlers>
-				<MethodInvoker generator="{UserManager}" method="storeUser" arguments="{resultObject}"/>
+				<ServiceResponseAnnouncer type="result"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
+	</EventHandlers>
+	
+	<EventHandlers type="{LoginEvent.LOGIN_SUCCESSFUL}" debug="true">
+		<MethodInvoker generator="{UserManager}" method="storeUser" arguments="{event.user}"/>
 	</EventHandlers>
 </EventMap>

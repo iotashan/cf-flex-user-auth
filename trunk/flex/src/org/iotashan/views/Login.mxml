@@ -2,12 +2,13 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:mate="http://mate.asfusion.com/">
 	<mx:Script>
 		<![CDATA[
+			import org.iotashan.business.ErrorManager;
 			import mx.validators.Validator;
 			import com.asfusion.mate.events.ResponseEvent;
 			import org.iotashan.events.LoginEvent;
 			import org.iotashan.vos.User;
 			
-			[Bindable] private var loginUser:User;
+			[Bindable] private var tmpUser:User;
 			
 			private function doValidation():void {
 				// validate the form
@@ -18,35 +19,40 @@
 					return;
 				}
 				
-				loginUser = new User();
-				loginUser.email = inputUsername.text;
-				loginUser.password = inputPassword.text;
+				tmpUser = new User();
+				tmpUser.email = inputUsername.text;
+				tmpUser.password = inputPassword.text;
 				
 				// dispatch the event
 				loginDispatcher.generateEvent();
 			}
 			
-			private function tryLoginResult(val:Object):void {
+			private function tryLogin(val:Object):void {
 				var resultUser:User = val as User;
 				
 				if (resultUser.UserID == 0) {
 					// login failed
 					inputUsername.errorString = "Login Failed. Please try again";
 					inputUsername.setFocus();
+					
+					dispatchEvent(new LoginEvent(LoginEvent.LOGIN_UNSUCCESSFUL));
 				} else {
-					dispatchEvent(new LoginEvent(LoginEvent.LOGIN_SUCCESSFUL));
+					var myEvent:LoginEvent = new LoginEvent(LoginEvent.LOGIN_SUCCESSFUL);
+					myEvent.user = resultUser;
+					
+					dispatchEvent(myEvent);
 				}
 			}
 		]]>
 	</mx:Script>
 	
-	<!-- event dispatchers -->
+	<!-- event dispatcher -->
 	<mate:Dispatcher id="loginDispatcher" generator="{LoginEvent}" type="{LoginEvent.LOGIN}">
 		<mate:eventProperties>
-			<mate:EventProperties user="{loginUser}"/>
+			<mate:EventProperties user="{tmpUser}"/>
 		</mate:eventProperties>
 		
-		<mate:ServiceResponseHandler result="tryLoginResult(event)"/>
+		<mate:ServiceResponseHandler result="tryLogin(event.result)"/>
 	</mate:Dispatcher>
 	
 	<!-- validators -->
