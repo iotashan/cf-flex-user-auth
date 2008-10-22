@@ -11,9 +11,7 @@ package org.iotashan.business {
 			return _user;
 		}
 		
-		public function storeUser(val:Object):void {
-			var tmpUser:User = val as User;
-			
+		public function storeUser(tmpUser:User):void {
 			if (tmpUser != _user) {
 				_user = tmpUser;
 			}
