@@ -23,11 +23,15 @@
 		</cfscript>
 	</cffunction>
 
+	<cffunction name="isUsernameAvailable" output="false" access="remote" returntype="boolean">
+		<cfargument name="username" type="string" required="true" />
+ 		<cfreturn createObject("component", "UserDAO").isUsernameAvailable(arguments.username)>
+	</cffunction>
+
 	<cffunction name="getById" output="false" access="remote" returntype="model.User">
 		<cfargument name="id" type="numeric" required="true" />
  		<cfreturn createObject("component", "UserDAO").read(arguments.id)>
 	</cffunction>
-
 
 	<cffunction name="save" output="false" access="remote" returntype="model.User">
 		<cfargument name="obj" type="model.User" required="true" />

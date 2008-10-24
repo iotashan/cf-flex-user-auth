@@ -30,4 +30,8 @@
 	<EventHandlers type="{LoginEvent.LOGIN_SUCCESSFUL}" debug="true">
 		<MethodInvoker generator="{UserManager}" method="storeUser" arguments="{event.user}"/>
 	</EventHandlers>
+	
+	<EventHandlers type="{LoginEvent.LOGOUT}" debug="true">
+		<MethodInvoker generator="{UserManager}" method="logout"/>
+	</EventHandlers>
 </EventMap>
