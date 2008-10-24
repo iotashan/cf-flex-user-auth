@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+	<mx:Script>
+		<![CDATA[
+			import mx.messaging.messages.ErrorMessage;
+			import mx.validators.Validator;
+			import org.iotashan.events.LoginEvent;
+			
+			private function doValidation():void {
+				// validate the form
+				var results:Array = Validator.validateAll(validators);
+				
+				// make sure passwords match
+				if (inputPassword.text != inputPassword2.text) {
+					inputPassword.errorString = "Passwords do not match.";
+					inputPassword2.errorString = "Passwords do not match.";
+					results.push("Passwords do not match.");
+				}
+				
+				// if any fields were not valid, do nothing
+				if (results.length > 0) {
+					return;
+				}
+				
+				
+			}
+		]]>
+	</mx:Script>
+	
+	<!-- validators -->
+	<mx:Array id="validators">
+		<mx:EmailValidator id="vEmail" source="{inputEmail}" property="text" required="true"/>
+		<mx:StringValidator id="vPassword" source="{inputPassword}" property="text" required="true" minLength="6"/>
+		<mx:StringValidator id="vPassword2" source="{inputPassword2}" property="text" required="true" minLength="6"/>
+	</mx:Array>
+	
+	<mx:Panel layout="vertical" horizontalCenter="0" verticalCenter="0" title="Create Account">
+		<mx:Form width="100%" height="100%" defaultButton="{btnSubmit}">
+			<mx:FormItem label="Email Address" required="true">
+				<mx:TextInput id="inputEmail"/>
+			</mx:FormItem>
+			<mx:FormItem label="Password" required="true">
+				<mx:TextInput id="inputPassword" displayAsPassword="true"/>
+			</mx:FormItem>
+			<mx:FormItem label="Confirm Password" required="true">
+				<mx:TextInput id="inputPassword2" displayAsPassword="true"/>
+			</mx:FormItem>
+			<mx:FormItem direction="horizontal">
+				<mx:Button label="Submit" id="btnSubmit" click="doValidation()"/>
+				<mx:Button label="Cancel" id="btnCancel" click="dispatchEvent(new LoginEvent(LoginEvent.LOGOUT))"/>
+			</mx:FormItem>
+		</mx:Form>
+	</mx:Panel>
+</mx:Canvas>

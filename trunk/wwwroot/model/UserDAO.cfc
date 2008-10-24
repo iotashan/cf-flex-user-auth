@@ -35,6 +35,19 @@
 		<cfreturn qLogin/>
 	</cffunction>
 
+	<cffunction name="isUsernameAvailable" output="false" access="public" returntype="boolean">
+		<cfargument name="username" required="true" type="string">
+
+		<!--- try logging in --->
+		<cfquery name="qLogin" datasource="#REQUEST.dsn#">
+			SELECT userID
+			FROM users
+			WHERE email = <cfqueryparam cfsqltype="cf_sql_varchar" value="#ARGUMENTS.username#">
+		</cfquery>
+		
+		<cfreturn NOT qLogin.recordcount />
+	</cffunction>
+
 	<cffunction name="create" output="false" access="public">
 		<cfargument name="bean" required="true" type="model.User">
 		<cfset var qCreate="">

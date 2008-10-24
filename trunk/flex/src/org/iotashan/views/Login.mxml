@@ -2,6 +2,7 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:mate="http://mate.asfusion.com/">
 	<mx:Script>
 		<![CDATA[
+			import org.iotashan.events.AccountEvent;
 			import org.iotashan.business.ErrorManager;
 			import mx.validators.Validator;
 			import com.asfusion.mate.events.ResponseEvent;
@@ -32,7 +33,7 @@
 				
 				if (resultUser.UserID == 0) {
 					// login failed
-					inputUsername.errorString = "Login Failed. Please try again";
+					inputUsername.errorString = "Login Failed. Please try again.";
 					inputUsername.setFocus();
 					
 					dispatchEvent(new LoginEvent(LoginEvent.LOGIN_UNSUCCESSFUL));
@@ -74,9 +75,7 @@
 				<mx:Spacer width="76" height="10"/>
 				<mx:Button label="Log In" id="btnLogin" click="doValidation()"/>
 				<mx:Text text="or"/>
-<!--
-				<mx:LinkButton label="Create an Account" click="doCreateAccount()"/>
--->
+				<mx:LinkButton label="Create an Account" click="dispatchEvent(new AccountEvent(AccountEvent.CREATE_ACCOUNT))"/>
 			</mx:HBox>
 		</mx:Form>
 	</mx:Panel>

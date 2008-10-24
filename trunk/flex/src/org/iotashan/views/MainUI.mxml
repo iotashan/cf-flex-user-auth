@@ -5,9 +5,11 @@
 			import org.iotashan.events.*
 		]]>
 	</mx:Script>
+	<mate:Listener type="{AccountEvent.CREATE_ACCOUNT}" receive="mainStack.selectedChild = accountScreen"/>
 	<mate:Listener type="{LoginEvent.LOGOUT}" receive="mainStack.selectedChild = loginScreen"/>
 	
 	<mx:ViewStack id="mainStack" height="100%" width="100%">
 		<views:Login id="loginScreen"/>
+		<views:CreateAccount id="accountScreen"/>
 	</mx:ViewStack>
 </mx:Canvas>
