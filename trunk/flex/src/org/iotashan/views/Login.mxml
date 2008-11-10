@@ -32,7 +32,7 @@
 				}
 				
 				tmpUser = new User();
-				tmpUser.email = inputUsername.text;
+				tmpUser.email = inputEmail.text;
 				tmpUser.password = inputPassword.text;
 				
 				// dispatch the event
@@ -44,8 +44,8 @@
 				
 				if (resultUser.UserID == 0) {
 					// login failed
-					inputUsername.errorString = "Login Failed. Please try again.";
-					inputUsername.setFocus();
+					inputEmail.errorString = "Login Failed. Please try again.";
+					inputEmail.setFocus();
 					
 					dispatchEvent(new LoginEvent(LoginEvent.LOGIN_UNSUCCESSFUL));
 				} else if (resultUser.verificationCode.length > 0) {
@@ -121,15 +121,15 @@
 	
 	<!-- validators -->
 	<mx:Array id="validators">
-		<mx:EmailValidator id="vEmail" required="true" source="{inputUsername}" property="text"/>
+		<mx:EmailValidator id="vEmail" required="true" source="{inputEmail}" property="text"/>
 		<mx:StringValidator id="vPassword" required="true" source="{inputPassword}" property="text"/>
 	</mx:Array>
 	
 	<!-- view -->
 	<mx:Panel layout="vertical" horizontalCenter="0" verticalCenter="0" title="Log In">
 		<mx:Form width="100%" height="100%" defaultButton="{btnLogin}">
-			<mx:FormItem label="Username" required="true" labelWidth="70">
-				<mx:TextInput id="inputUsername"/>
+			<mx:FormItem label="Email" required="true" labelWidth="70">
+				<mx:TextInput id="inputEmail"/>
 			</mx:FormItem>
 			<mx:FormItem label="Password" required="true" labelWidth="70">
 				<mx:TextInput displayAsPassword="true" id="inputPassword"/>

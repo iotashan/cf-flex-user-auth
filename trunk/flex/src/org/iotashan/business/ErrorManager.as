@@ -1,9 +1,10 @@
 package org.iotashan.business
 {
+	import mx.controls.Alert;
+	import mx.rpc.Fault;
+	
 	public class ErrorManager
 	{
-		import mx.controls.Alert;
-		import mx.rpc.Fault;
 		
 		public function remoteError(fault:Fault):void {
 			var myAlert:Alert
