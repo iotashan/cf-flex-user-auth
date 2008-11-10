@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+	<mx:Script>
+		<![CDATA[
+			import org.iotashan.events.LoginEvent;
+			private function logOut():void {
+				var logOutEvent:LoginEvent = new LoginEvent(LoginEvent.LOGOUT);
+				dispatchEvent(logOutEvent);
+			}
+		]]>
+	</mx:Script>
+	<mx:Panel width="250" height="200" layout="absolute" horizontalCenter="0" verticalCenter="0" title="Welcome!">
+		<mx:Text text="Welcome to the application.&#xd;You are now logged in." horizontalCenter="0" verticalCenter="0" textAlign="center"/>
+		<mx:Button label="Log Out" click="logOut()" right="10" bottom="10"/>
+	</mx:Panel>
+</mx:Canvas>

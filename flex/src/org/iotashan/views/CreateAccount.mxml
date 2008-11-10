@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:mate="http://mate.asfusion.com/">
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
+			import org.iotashan.vos.User;
+			import org.iotashan.events.AccountEvent;
 			import mx.messaging.messages.ErrorMessage;
 			import mx.validators.Validator;
 			import org.iotashan.events.LoginEvent;
+			
+			[Bindable] private var newUser:User;
 			
 			private function doValidation():void {
 				// validate the form
@@ -22,10 +27,59 @@
 					return;
 				}
 				
+				// dispatch the event
+				checkUsernameDispatcher.generateEvent();
+			}
+			
+			
+			private function handleUsernmeCheck(val:Object):void {
+				var usernameAvailable:Boolean = val as Boolean;
 				
+				if (usernameAvailable) {
+					// if UserGateway.isUsernameAvailable returns true
+					// build the user to save
+					newUser = new User();
+					newUser.email = inputEmail.text;
+					newUser.password = inputPassword.text;
+					
+					// dispatch the event
+					saveUser.generateEvent();
+				} else {
+					// username not available, display the error
+					inputEmail.errorString = "Username is unavailable. Please try another username.";
+				}
+			}
+			
+			private function userSaved(val:Object):void {
+				var resultUser:User = val as User;
+				
+				// log in with the new user
+				var myEvent:LoginEvent = new LoginEvent(LoginEvent.LOGOUT);
+				
+				// alert the user that an email has been sent
+				Alert.show("An email has been sent with a link to activate your account.","Email Sent");
+				
+				dispatchEvent(myEvent);
 			}
 		]]>
 	</mx:Script>
+	
+	<!-- event dispatcher -->
+	<mate:Dispatcher id="checkUsernameDispatcher" generator="{AccountEvent}" type="{AccountEvent.CHECK_USERNAME}">
+		<mate:eventProperties>
+			<mate:EventProperties email="{inputEmail.text}"/>
+		</mate:eventProperties>
+		
+		<mate:ServiceResponseHandler result="handleUsernmeCheck(event.result)"/>
+	</mate:Dispatcher>
+
+	<mate:Dispatcher id="saveUser" generator="{AccountEvent}" type="{AccountEvent.SAVE_ACCOUNT}">
+		<mate:eventProperties>
+			<mate:EventProperties user="{newUser}"/>
+		</mate:eventProperties>
+		
+		<mate:ServiceResponseHandler result="userSaved(event.result)"/>
+	</mate:Dispatcher>
 	
 	<!-- validators -->
 	<mx:Array id="validators">

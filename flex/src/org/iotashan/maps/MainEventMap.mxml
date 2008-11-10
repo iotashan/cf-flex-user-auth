@@ -10,28 +10,64 @@
 		]]>
 	</mx:Script>
 	
-	<Debugger level="{Debugger.ALL}" />
-	
 	<!-- unhandled faults -->
 	<EventHandlers type="{UnhandledFaultEvent.FAULT}">
-		<MethodInvoker generator="{ErrorManager}" method="remoteError" arguments="{event}"/>
+		<MethodInvoker generator="{ErrorManager}" method="remoteError" arguments="{event.fault}"/>
 	</EventHandlers>
 	
 	<!-- Login/Logout events -->
-	<EventHandlers type="{LoginEvent.LOGIN}" debug="true">
+	<EventHandlers type="{LoginEvent.LOGIN}" debug="false">
 		<!-- call the remoting service -->
-		<RemoteObjectInvoker source="model.UserGateway" method="tryLogin" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}" debug="true">
+		<RemoteObjectInvoker source="model.UserGateway" method="tryLogin" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}" debug="false">
 			<resultHandlers>
 				<ServiceResponseAnnouncer type="result"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>
 	
-	<EventHandlers type="{LoginEvent.LOGIN_SUCCESSFUL}" debug="true">
+	<EventHandlers type="{LoginEvent.LOGIN_SUCCESSFUL}" debug="false">
 		<MethodInvoker generator="{UserManager}" method="storeUser" arguments="{event.user}"/>
 	</EventHandlers>
 	
-	<EventHandlers type="{LoginEvent.LOGOUT}" debug="true">
+	<EventHandlers type="{LoginEvent.LOGOUT}" debug="false">
 		<MethodInvoker generator="{UserManager}" method="logout"/>
 	</EventHandlers>
+	
+	<!-- Create Account events -->
+	<EventHandlers type="{AccountEvent.CHECK_USERNAME}" debug="false">
+		<!-- call the remoting service -->
+		<RemoteObjectInvoker source="model.UserGateway" method="isUsernameAvailable" destination="ColdFusion" showBusyCursor="true" arguments="{event.email}" debug="false">
+			<resultHandlers>
+				<ServiceResponseAnnouncer type="result"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+	
+	<EventHandlers type="{AccountEvent.SAVE_ACCOUNT}" debug="false">
+		<!-- call the remoting service -->
+		<RemoteObjectInvoker source="model.UserGateway" method="save" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}" debug="false">
+			<resultHandlers>
+				<ServiceResponseAnnouncer type="result"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+	
+	<EventHandlers type="{AccountEvent.RESEND_ACTIVATION}" debug="false">
+		<!-- call the remoting service -->
+		<RemoteObjectInvoker source="model.UserGateway" method="sendRegistrationEmail" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}" debug="false">
+			<resultHandlers>
+				<ServiceResponseAnnouncer type="result"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+	
+	<EventHandlers type="{AccountEvent.ACTIVATE_ACCOUNT}" debug="false">
+		<!-- call the remoting service -->
+		<RemoteObjectInvoker source="model.UserGateway" method="activateAccount" destination="ColdFusion" showBusyCursor="true" arguments="{event.verificationCode}" debug="false">
+			<resultHandlers>
+				<ServiceResponseAnnouncer type="result"/>
+			</resultHandlers>
+		</RemoteObjectInvoker>
+	</EventHandlers>
+	
 </EventMap>

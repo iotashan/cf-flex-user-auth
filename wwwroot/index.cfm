@@ -79,6 +79,9 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	// embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
 			"src", "main",
+			<cfif isDefined("URL.v")>
+			<cfoutput>"FlashVars", "v=#URL.v#",</cfoutput>
+			</cfif>
 			"width", "100%",
 			"height", "100%",
 			"align", "middle",
@@ -102,12 +105,18 @@ if ( hasProductInstall && !hasRequestedVersion ) {
   	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 			id="main" width="100%" height="100%"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
+			<cfif isDefined("URL.v")>
+			<cfoutput><param name="FlashVars" value="v=#URL.v#" /></cfoutput>
+			</cfif>
 			<param name="movie" value="main.swf" />
 			<param name="quality" value="high" />
 			<param name="bgcolor" value="#869ca7" />
 			<param name="allowScriptAccess" value="sameDomain" />
 			<embed src="main.swf" quality="high" bgcolor="#869ca7"
 				width="100%" height="100%" name="main" align="middle"
+				<cfif isDefined("URL.v")>
+                <cfoutput>FlashVars="v=#URL.v#" /></cfoutput>
+                </cfif>
 				play="true"
 				loop="false"
 				quality="high"

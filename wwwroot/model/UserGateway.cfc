@@ -3,25 +3,8 @@
 	<cffunction name="tryLogin" output="false" access="remote" returntype="model.User">
 		<cfargument name="obj" type="model.User" required="true" />
  		
-		<cfscript>
-			// hash the password
-			ARGUMENTS.obj.password = encrypt(ARGUMENTS.obj.password,REQUEST.secretKey);
-			
-			// check the login
-			qLogin = createObject("component", "UserDAO").tryLogin(ARGUMENTS.obj);
-			
-			if (qLogin.recordcount) {
-				// return a User if there was a match
-				return getByID(qLogin.userID);
-			} else {
-				// clear session and password, return empty user
-				ARGUMENTS.obj.userID = 0;
-				ARGUMENTS.obj.password = "";
-				
-				return ARGUMENTS.obj;
-			}
-		</cfscript>
-	</cffunction>
+        <cfreturn createObject("component", "UserDAO").tryLogin(ARGUMENTS.obj)>
+    </cffunction>
 
 	<cffunction name="isUsernameAvailable" output="false" access="remote" returntype="boolean">
 		<cfargument name="username" type="string" required="true" />
@@ -32,6 +15,20 @@
 		<cfargument name="id" type="numeric" required="true" />
  		<cfreturn createObject("component", "UserDAO").read(arguments.id)>
 	</cffunction>
+
+	<cffunction name="sendRegistrationEmail" output="false" access="remote" returntype="boolean">
+		<cfargument name="user" type="model.User" required="true" />
+        
+        <cfset tmp = createObject("component", "UserDAO").sendRegistrationEmail(arguments.user) />
+        
+ 		<cfreturn true/>
+	</cffunction>
+    
+    <cffunction name="activateAccount" output="false" access="remote" returntype="boolean">
+    	<cfargument name="verificationCode" type="string" required="true" />
+        
+        <cfreturn createObject("component", "UserDAO").activateAccount(arguments.verificationCode)/>
+    </cffunction>
 
 	<cffunction name="save" output="false" access="remote" returntype="model.User">
 		<cfargument name="obj" type="model.User" required="true" />
