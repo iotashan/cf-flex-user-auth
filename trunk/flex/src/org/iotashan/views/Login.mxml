@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:mate="http://mate.asfusion.com/">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:mate="http://mate.asfusion.com/" initialize="init()" show="clearPassword()">
 	<mx:Script>
 		<![CDATA[
+			import mx.core.Application;
+			import mx.events.CloseEvent;
+			import mx.controls.Alert;
 			import org.iotashan.events.AccountEvent;
 			import org.iotashan.business.ErrorManager;
 			import mx.validators.Validator;
@@ -10,6 +13,14 @@
 			import org.iotashan.vos.User;
 			
 			[Bindable] private var tmpUser:User;
+			[Bindable] private var verificationCode:String;
+			
+			private function init():void {
+				if (Application.application.parameters.v) {
+					verificationCode = Application.application.parameters.v;
+					activateAccount.generateEvent();
+				}
+			}
 			
 			private function doValidation():void {
 				// validate the form
@@ -37,12 +48,48 @@
 					inputUsername.setFocus();
 					
 					dispatchEvent(new LoginEvent(LoginEvent.LOGIN_UNSUCCESSFUL));
-				} else {
+				} else if (resultUser.verificationCode.length > 0) {
+					// remove the password
+					clearPassword();
+					
+					// set the result user, so we can resend the activation email in resendActivation()
+					tmpUser = resultUser;
+					
+					Alert.show("Your account has not yet been activated. Do you need the activation email resent?","Error",Alert.YES|Alert.NO,null,resendActivation);
+				}else {
 					var myEvent:LoginEvent = new LoginEvent(LoginEvent.LOGIN_SUCCESSFUL);
 					myEvent.user = resultUser;
 					
 					dispatchEvent(myEvent);
 				}
+			}
+			
+			private function accountActivated(val:Object):void {
+				var ret:Boolean = val as Boolean;
+				
+				if (ret) {
+					Alert.show("Your account has been activated. You can now log in.","Account Activated");
+				} else {
+					Alert.show("This verification code has already been used. You may want to try to logging in.","Error");
+				}
+			}
+			
+			private function clearPassword():void {
+				inputPassword.text = "";
+			}
+			
+			private function resendActivation(event:CloseEvent):void {
+				if (event.detail == Alert.YES) {
+					// dispatch event
+					resendActivationDispatcher.generateEvent();
+				} else {
+					// do nothing
+					return;
+				}
+			}
+			
+			private function activationSent():void {
+				Alert.show("An activation email has been sent to the email address on file.","Email Sent");
 			}
 		]]>
 	</mx:Script>
@@ -54,6 +101,22 @@
 		</mate:eventProperties>
 		
 		<mate:ServiceResponseHandler result="tryLogin(event.result)"/>
+	</mate:Dispatcher>
+	
+	<mate:Dispatcher id="activateAccount" generator="{AccountEvent}" type="{AccountEvent.ACTIVATE_ACCOUNT}">
+		<mate:eventProperties>
+			<mate:EventProperties verificationCode="{verificationCode}"/>
+		</mate:eventProperties>
+		
+		<mate:ServiceResponseHandler result="accountActivated(event.result)"/>
+	</mate:Dispatcher>
+	
+	<mate:Dispatcher id="resendActivationDispatcher" generator="{AccountEvent}" type="{AccountEvent.RESEND_ACTIVATION}">
+		<mate:eventProperties>
+			<mate:EventProperties user="{tmpUser}"/>
+		</mate:eventProperties>
+		
+		<mate:ServiceResponseHandler result="activationSent()"/>
 	</mate:Dispatcher>
 	
 	<!-- validators -->

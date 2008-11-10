@@ -1,6 +1,8 @@
 package org.iotashan.business {
 	import flash.events.EventDispatcher;
 	
+	import mx.controls.Alert;
+	
 	import org.iotashan.vos.User;
 
 	public class UserManager extends EventDispatcher {
@@ -18,6 +20,9 @@ package org.iotashan.business {
 		}
 		
 		public function logout():void {
+			// notify the user they have loged out
+			Alert.show("You have logged out","Log Out");
+			// reset the user data
 			_user = new User();
 		}
 	}

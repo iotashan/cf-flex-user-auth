@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
-	<mx:Panel layout="absolute" horizontalCenter="0" verticalCenter="0" title="Welcome" width="288" height="146">
-		<mx:Text text="You have successfully logged in." horizontalCenter="0" verticalCenter="0"/>
-	</mx:Panel>
-	
-</mx:Canvas>
