@@ -1,11 +1,11 @@
-package org.iotashan.business {
+package org.iotashan.business
+{
 	import flash.events.EventDispatcher;
-	
 	import mx.controls.Alert;
-	
 	import org.iotashan.vos.User;
 
-	public class UserManager extends EventDispatcher {
+	public class UserManager extends EventDispatcher
+	{
 		private var _user:User = new User();
 		
 		[Bindable (event="userChange")]

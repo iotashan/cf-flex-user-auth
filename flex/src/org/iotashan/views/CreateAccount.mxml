@@ -3,11 +3,10 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.controls.Alert;
-			import org.iotashan.vos.User;
-			import org.iotashan.events.AccountEvent;
 			import mx.messaging.messages.ErrorMessage;
 			import mx.validators.Validator;
-			import org.iotashan.events.LoginEvent;
+			import org.iotashan.vos.User;
+			import org.iotashan.events.AccountEvent;
 			
 			[Bindable] private var newUser:User;
 			
@@ -54,7 +53,7 @@
 				var resultUser:User = val as User;
 				
 				// log in with the new user
-				var myEvent:LoginEvent = new LoginEvent(LoginEvent.LOGOUT);
+				var myEvent:AccountEvent = new AccountEvent(AccountEvent.CREATION_FINISHED);
 				
 				// alert the user that an email has been sent
 				Alert.show("An email has been sent with a link to activate your account.","Email Sent");
@@ -101,7 +100,7 @@
 			</mx:FormItem>
 			<mx:FormItem direction="horizontal">
 				<mx:Button label="Submit" id="btnSubmit" click="doValidation()"/>
-				<mx:Button label="Cancel" id="btnCancel" click="dispatchEvent(new LoginEvent(LoginEvent.LOGOUT))"/>
+				<mx:Button label="Cancel" id="btnCancel" click="dispatchEvent(new AccountEvent(AccountEvent.CREATION_FINISHED))"/>
 			</mx:FormItem>
 		</mx:Form>
 	</mx:Panel>
