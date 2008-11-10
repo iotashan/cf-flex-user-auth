@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!---
+	The MainEventMap class is the brain of the application.
+	All incoming and outgoing events are sent through here.
+-->
 <EventMap xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="http://mate.asfusion.com/">
 	<mx:Script>
 		<![CDATA[
@@ -20,6 +24,7 @@
 		<!-- call the remoting service -->
 		<RemoteObjectInvoker source="model.UserGateway" method="tryLogin" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}" debug="false">
 			<resultHandlers>
+				<!-- Send the result back to the calling code -->
 				<ServiceResponseAnnouncer type="result"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
@@ -38,6 +43,7 @@
 		<!-- call the remoting service -->
 		<RemoteObjectInvoker source="model.UserGateway" method="isUsernameAvailable" destination="ColdFusion" showBusyCursor="true" arguments="{event.email}" debug="false">
 			<resultHandlers>
+				<!-- Send the result back to the calling code -->
 				<ServiceResponseAnnouncer type="result"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
@@ -47,6 +53,7 @@
 		<!-- call the remoting service -->
 		<RemoteObjectInvoker source="model.UserGateway" method="save" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}" debug="false">
 			<resultHandlers>
+				<!-- Send the result back to the calling code -->
 				<ServiceResponseAnnouncer type="result"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
@@ -56,6 +63,7 @@
 		<!-- call the remoting service -->
 		<RemoteObjectInvoker source="model.UserGateway" method="sendRegistrationEmail" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}" debug="false">
 			<resultHandlers>
+				<!-- Send the result back to the calling code -->
 				<ServiceResponseAnnouncer type="result"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
@@ -65,6 +73,7 @@
 		<!-- call the remoting service -->
 		<RemoteObjectInvoker source="model.UserGateway" method="activateAccount" destination="ColdFusion" showBusyCursor="true" arguments="{event.verificationCode}" debug="false">
 			<resultHandlers>
+				<!-- Send the result back to the calling code -->
 				<ServiceResponseAnnouncer type="result"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>

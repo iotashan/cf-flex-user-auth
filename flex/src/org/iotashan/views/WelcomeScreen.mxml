@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!---
+	The WelcomeScreen view is displayed when a user is logged in.
+-->
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
 	<mx:Script>
 		<![CDATA[
@@ -11,6 +14,9 @@
 	</mx:Script>
 	<mx:Panel width="250" height="200" layout="absolute" horizontalCenter="0" verticalCenter="0" title="Welcome!">
 		<mx:Text text="Welcome to the application.&#xd;You are now logged in." horizontalCenter="0" verticalCenter="0" textAlign="center"/>
-		<mx:Button label="Log Out" click="logOut()" right="10" bottom="10"/>
+		<!---
+			This button logs a user out.
+		-->
+		<mx:Button id="btnLogout" label="Log Out" click="logOut()" right="10" bottom="10"/>
 	</mx:Panel>
 </mx:Canvas>
