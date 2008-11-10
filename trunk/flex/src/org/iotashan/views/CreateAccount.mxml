@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!---
+	The CreateAccount view is used for creating new accounts.
+-->
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:mate="http://mate.asfusion.com/">
 	<mx:Script>
 		<![CDATA[
@@ -99,7 +102,13 @@
 				<mx:TextInput id="inputPassword2" displayAsPassword="true"/>
 			</mx:FormItem>
 			<mx:FormItem direction="horizontal">
+				<!---
+					This button attempts to create a new account.
+				-->
 				<mx:Button label="Submit" id="btnSubmit" click="doValidation()"/>
+				<!---
+					This button sends the user back to the login screen.
+				-->
 				<mx:Button label="Cancel" id="btnCancel" click="dispatchEvent(new AccountEvent(AccountEvent.CREATION_FINISHED))"/>
 			</mx:FormItem>
 		</mx:Form>
