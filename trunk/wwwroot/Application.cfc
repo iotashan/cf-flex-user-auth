@@ -28,7 +28,7 @@
 		<cfargument name="targetPage" type="string" required="true"/>
 		
 		<cfscript>
-			REQUEST.dsn = "mousebreeder";
+			REQUEST.dsn = "cf-flex-user-auth";
 			REQUEST.secretKey = "ChangeThisKeyForPasswordEncryption";
 			REQUEST.supportEmail = "shan@iotashan.com";
 			// change this to your URL. Defaulted to the root of whatever the URL called is
