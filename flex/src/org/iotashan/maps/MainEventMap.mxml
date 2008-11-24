@@ -6,13 +6,20 @@
 <EventMap xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="http://mate.asfusion.com/">
 	<mx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
 			import com.asfusion.mate.core.*;
 			import com.asfusion.mate.events.UnhandledFaultEvent;
 			import org.iotashan.business.*;
 			import org.iotashan.events.*;
-			import org.iotashan.views.*
+			import org.iotashan.views.*;
 		]]>
 	</mx:Script>
+	
+	<!-- startup event handler -->
+	<EventHandlers type="{FlexEvent.INITIALIZE}">
+		<!-- init the managers, pass in event dispatcher -->
+		<MethodInvoker generator="{UserManager}" constructorArguments="{scope.dispatcher}"/>
+	</EventHandlers>
 	
 	<!-- unhandled faults -->
 	<EventHandlers type="{UnhandledFaultEvent.FAULT}">
@@ -25,17 +32,21 @@
 		<RemoteObjectInvoker source="model.UserGateway" method="tryLogin" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}" debug="false">
 			<resultHandlers>
 				<!-- Send the result back to the calling code -->
-				<ServiceResponseAnnouncer type="result"/>
+				<MethodInvoker generator="{UserManager}" method="checkLogin" arguments="{resultObject}" constructorArguments="{scope.dispatcher}"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>
 	
-	<EventHandlers type="{LoginEvent.LOGIN_SUCCESSFUL}" debug="false">
-		<MethodInvoker generator="{UserManager}" method="storeUser" arguments="{event.user}"/>
+	<EventHandlers type="{LoginEvent.LOGIN_UNSUCCESSFUL}" debug="false">
+		<MethodInvoker generator="{Login}" method="loginFailed"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{AccountEvent.ACCOUNT_NOT_ACTIVE}" debug="false">
+		<MethodInvoker generator="{Login}" method="accountNotActivated" arguments="{event.user}"/>
 	</EventHandlers>
 	
 	<EventHandlers type="{LoginEvent.LOGOUT}" debug="false">
-		<MethodInvoker generator="{UserManager}" method="logout"/>
+		<MethodInvoker generator="{UserManager}" method="logout" constructorArguments="{scope.dispatcher}"/>
 	</EventHandlers>
 	
 	<!-- Create Account events -->
@@ -74,7 +85,7 @@
 		<RemoteObjectInvoker source="model.UserGateway" method="activateAccount" destination="ColdFusion" showBusyCursor="true" arguments="{event.verificationCode}" debug="false">
 			<resultHandlers>
 				<!-- Send the result back to the calling code -->
-				<ServiceResponseAnnouncer type="result"/>
+				<CallBack method="accountActivated" arguments="{resultObject}"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>
