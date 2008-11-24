@@ -15,13 +15,13 @@
 			import org.iotashan.events.LoginEvent;
 			import org.iotashan.vos.User;
 			
-			[Bindable] private var tmpUser:User;
-			[Bindable] private var verificationCode:String;
+			public var inactiveUser:User;
 			
 			private function init():void {
 				if (Application.application.parameters.v) {
-					verificationCode = Application.application.parameters.v;
-					activateAccount.generateEvent();
+					var accountEvent:AccountEvent = new AccountEvent(AccountEvent.ACTIVATE_ACCOUNT);
+					accountEvent.verificationCode = Application.application.parameters.v;
+					dispatchEvent(accountEvent);
 				}
 			}
 			
@@ -34,37 +34,28 @@
 					return;
 				}
 				
-				tmpUser = new User();
+				var tmpUser:User = new User();
 				tmpUser.email = inputEmail.text;
 				tmpUser.password = inputPassword.text;
 				
 				// dispatch the event
-				loginDispatcher.generateEvent();
+				var loginEvent:LoginEvent = new LoginEvent(LoginEvent.LOGIN);
+				loginEvent.user = tmpUser;
+				dispatchEvent(loginEvent);
 			}
 			
-			private function tryLogin(val:Object):void {
-				var resultUser:User = val as User;
-				
-				if (resultUser.UserID == 0) {
-					// login failed
-					inputEmail.errorString = "Login Failed. Please try again.";
-					inputEmail.setFocus();
-					
-					dispatchEvent(new LoginEvent(LoginEvent.LOGIN_UNSUCCESSFUL));
-				} else if (resultUser.verificationCode.length > 0) {
-					// remove the password
-					clearPassword();
-					
-					// set the result user, so we can resend the activation email in resendActivation()
-					tmpUser = resultUser;
-					
-					Alert.show("Your account has not yet been activated. Do you need the activation email resent?","Error",Alert.YES|Alert.NO,null,resendActivation);
-				}else {
-					var myEvent:LoginEvent = new LoginEvent(LoginEvent.LOGIN_SUCCESSFUL);
-					myEvent.user = resultUser;
-					
-					dispatchEvent(myEvent);
-				}
+			public function loginFailed():void {
+				inputEmail.errorString = "Login Failed. Please try again.";
+				inputEmail.setFocus();
+			}
+			
+			public function accountNotActivated(tmpUser:User):void {
+				// hold on to this inactive user, in case we want to resend activation.
+				inactiveUser = tmpUser;
+				// clear out the password
+				clearPassword();
+				// ask the user if they want the activation code again
+				Alert.show("Your account has not yet been activated. Do you need the activation email resent?","Error",Alert.YES|Alert.NO,null,resendActivation);
 			}
 			
 			private function accountActivated(val:Object):void {
@@ -84,7 +75,9 @@
 			private function resendActivation(event:CloseEvent):void {
 				if (event.detail == Alert.YES) {
 					// dispatch event
-					resendActivationDispatcher.generateEvent();
+					var accountEvent:AccountEvent = new AccountEvent(AccountEvent.RESEND_ACTIVATION);
+					accountEvent.user = inactiveUser;
+					dispatchEvent(accountEvent);
 				} else {
 					// do nothing
 					return;
@@ -96,31 +89,6 @@
 			}
 		]]>
 	</mx:Script>
-	
-	<!-- event dispatcher -->
-	<mate:Dispatcher id="loginDispatcher" generator="{LoginEvent}" type="{LoginEvent.LOGIN}">
-		<mate:eventProperties>
-			<mate:EventProperties user="{tmpUser}"/>
-		</mate:eventProperties>
-		
-		<mate:ServiceResponseHandler result="tryLogin(event.result)"/>
-	</mate:Dispatcher>
-	
-	<mate:Dispatcher id="activateAccount" generator="{AccountEvent}" type="{AccountEvent.ACTIVATE_ACCOUNT}">
-		<mate:eventProperties>
-			<mate:EventProperties verificationCode="{verificationCode}"/>
-		</mate:eventProperties>
-		
-		<mate:ServiceResponseHandler result="accountActivated(event.result)"/>
-	</mate:Dispatcher>
-	
-	<mate:Dispatcher id="resendActivationDispatcher" generator="{AccountEvent}" type="{AccountEvent.RESEND_ACTIVATION}">
-		<mate:eventProperties>
-			<mate:EventProperties user="{tmpUser}"/>
-		</mate:eventProperties>
-		
-		<mate:ServiceResponseHandler result="activationSent()"/>
-	</mate:Dispatcher>
 	
 	<!-- validators -->
 	<mx:Array id="validators">

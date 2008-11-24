@@ -13,6 +13,7 @@ package org.iotashan.events
 		public static const CREATE_ACCOUNT:String = "createAccountEvent";
 		public static const CREATION_FINISHED:String = "creationFinishedEvent";
 		public static const SAVE_ACCOUNT:String = "saveAccountEvent";
+		public static const ACCOUNT_NOT_ACTIVE:String = "accountNotActiveEvent";
 		public static const RESEND_ACTIVATION:String = "resendActivationEvent";
 		public static const ACTIVATE_ACCOUNT:String = "activateAccountEvent";
 		
