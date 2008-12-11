@@ -44,7 +44,7 @@
 				dispatchEvent(loginEvent);
 			}
 			
-			public function loginFailed():void {
+			public function loginFailed(e:Event):void {
 				inputEmail.errorString = "Login Failed. Please try again.";
 				inputEmail.setFocus();
 			}

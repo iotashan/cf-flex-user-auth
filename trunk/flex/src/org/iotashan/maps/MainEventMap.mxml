@@ -17,8 +17,8 @@
 	
 	<!-- startup event handler -->
 	<EventHandlers type="{FlexEvent.INITIALIZE}">
-		<!-- init the managers, pass in event dispatcher -->
-		<MethodInvoker generator="{UserManager}" constructorArguments="{scope.dispatcher}"/>
+		<!-- init the managers, pass in event dispatcher. Now anywhere these managers are called, we will get this instance -->
+		<ObjectBuilder generator="{UserManager}" constructorArguments="{[scope.dispatcher]}"/>
 	</EventHandlers>
 	
 	<!-- unhandled faults -->
@@ -27,32 +27,32 @@
 	</EventHandlers>
 	
 	<!-- Login/Logout events -->
-	<EventHandlers type="{LoginEvent.LOGIN}" debug="false">
+	<EventHandlers type="{LoginEvent.LOGIN}">
 		<!-- call the remoting service -->
-		<RemoteObjectInvoker source="model.UserGateway" method="tryLogin" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}" debug="false">
+		<RemoteObjectInvoker source="model.UserGateway" method="tryLogin" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}">
 			<resultHandlers>
 				<!-- Send the result back to the calling code -->
-				<MethodInvoker generator="{UserManager}" method="checkLogin" arguments="{resultObject}" constructorArguments="{scope.dispatcher}"/>
+				<MethodInvoker generator="{UserManager}" method="checkLogin" arguments="{resultObject}"/>
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>
 	
-	<EventHandlers type="{LoginEvent.LOGIN_UNSUCCESSFUL}" debug="false">
-		<MethodInvoker generator="{Login}" method="loginFailed"/>
-	</EventHandlers>
+	<Injectors target="{Login}">
+		<ListenerInjector method="loginFailed" eventType="{LoginEvent.LOGIN_UNSUCCESSFUL}"/>
+	</Injectors>
 	
-	<EventHandlers type="{AccountEvent.ACCOUNT_NOT_ACTIVE}" debug="false">
+	<EventHandlers type="{AccountEvent.ACCOUNT_NOT_ACTIVE}">
 		<MethodInvoker generator="{Login}" method="accountNotActivated" arguments="{event.user}"/>
 	</EventHandlers>
 	
-	<EventHandlers type="{LoginEvent.LOGOUT}" debug="false">
-		<MethodInvoker generator="{UserManager}" method="logout" constructorArguments="{scope.dispatcher}"/>
+	<EventHandlers type="{LoginEvent.LOGOUT}">
+		<MethodInvoker generator="{UserManager}" method="logout"/>
 	</EventHandlers>
 	
 	<!-- Create Account events -->
-	<EventHandlers type="{AccountEvent.CHECK_USERNAME}" debug="false">
+	<EventHandlers type="{AccountEvent.CHECK_USERNAME}">
 		<!-- call the remoting service -->
-		<RemoteObjectInvoker source="model.UserGateway" method="isUsernameAvailable" destination="ColdFusion" showBusyCursor="true" arguments="{event.email}" debug="false">
+		<RemoteObjectInvoker source="model.UserGateway" method="isUsernameAvailable" destination="ColdFusion" showBusyCursor="true" arguments="{event.email}">
 			<resultHandlers>
 				<!-- Send the result back to the calling code -->
 				<ServiceResponseAnnouncer type="result"/>
@@ -60,9 +60,9 @@
 		</RemoteObjectInvoker>
 	</EventHandlers>
 	
-	<EventHandlers type="{AccountEvent.SAVE_ACCOUNT}" debug="false">
+	<EventHandlers type="{AccountEvent.SAVE_ACCOUNT}">
 		<!-- call the remoting service -->
-		<RemoteObjectInvoker source="model.UserGateway" method="save" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}" debug="false">
+		<RemoteObjectInvoker source="model.UserGateway" method="save" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}">
 			<resultHandlers>
 				<!-- Send the result back to the calling code -->
 				<ServiceResponseAnnouncer type="result"/>
@@ -70,9 +70,9 @@
 		</RemoteObjectInvoker>
 	</EventHandlers>
 	
-	<EventHandlers type="{AccountEvent.RESEND_ACTIVATION}" debug="false">
+	<EventHandlers type="{AccountEvent.RESEND_ACTIVATION}">
 		<!-- call the remoting service -->
-		<RemoteObjectInvoker source="model.UserGateway" method="sendRegistrationEmail" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}" debug="false">
+		<RemoteObjectInvoker source="model.UserGateway" method="sendRegistrationEmail" destination="ColdFusion" showBusyCursor="true" arguments="{event.user}">
 			<resultHandlers>
 				<!-- Send the result back to the calling code -->
 				<ServiceResponseAnnouncer type="result"/>
@@ -80,9 +80,9 @@
 		</RemoteObjectInvoker>
 	</EventHandlers>
 	
-	<EventHandlers type="{AccountEvent.ACTIVATE_ACCOUNT}" debug="false">
+	<EventHandlers type="{AccountEvent.ACTIVATE_ACCOUNT}">
 		<!-- call the remoting service -->
-		<RemoteObjectInvoker source="model.UserGateway" method="activateAccount" destination="ColdFusion" showBusyCursor="true" arguments="{event.verificationCode}" debug="false">
+		<RemoteObjectInvoker source="model.UserGateway" method="activateAccount" destination="ColdFusion" showBusyCursor="true" arguments="{event.verificationCode}">
 			<resultHandlers>
 				<!-- Send the result back to the calling code -->
 				<CallBack method="accountActivated" arguments="{resultObject}"/>
