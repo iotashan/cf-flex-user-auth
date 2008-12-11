@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:views="org.iotashan.views.*" xmlns:maps="org.iotashan.maps.*" layout="vertical" xmlns:view="org.iotashan.view.*">
 	<maps:MainEventMap/>
-	<maps:ModelMap/>
 	
 	<views:MainUI/>
 </mx:Application>
