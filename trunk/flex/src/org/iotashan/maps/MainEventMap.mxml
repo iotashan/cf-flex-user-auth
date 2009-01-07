@@ -39,11 +39,8 @@
 	
 	<Injectors target="{Login}">
 		<ListenerInjector method="loginFailed" eventType="{LoginEvent.LOGIN_UNSUCCESSFUL}"/>
+		<ListenerInjector method="accountNotActivated" eventType="{AccountEvent.ACCOUNT_NOT_ACTIVE}"/>
 	</Injectors>
-	
-	<EventHandlers type="{AccountEvent.ACCOUNT_NOT_ACTIVE}">
-		<MethodInvoker generator="{Login}" method="accountNotActivated" arguments="{event.user}"/>
-	</EventHandlers>
 	
 	<EventHandlers type="{LoginEvent.LOGOUT}">
 		<MethodInvoker generator="{UserManager}" method="logout"/>
@@ -79,15 +76,4 @@
 			</resultHandlers>
 		</RemoteObjectInvoker>
 	</EventHandlers>
-	
-	<EventHandlers type="{AccountEvent.ACTIVATE_ACCOUNT}">
-		<!-- call the remoting service -->
-		<RemoteObjectInvoker source="model.UserGateway" method="activateAccount" destination="ColdFusion" showBusyCursor="true" arguments="{event.verificationCode}">
-			<resultHandlers>
-				<!-- Send the result back to the calling code -->
-				<CallBack method="accountActivated" arguments="{resultObject}"/>
-			</resultHandlers>
-		</RemoteObjectInvoker>
-	</EventHandlers>
-	
 </EventMap>
