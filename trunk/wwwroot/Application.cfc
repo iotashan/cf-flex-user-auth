@@ -30,7 +30,7 @@
 		<cfscript>
 			REQUEST.dsn = "cf-flex-user-auth";
 			REQUEST.secretKey = "ChangeThisKeyForPasswordEncryption";
-			REQUEST.supportEmail = "shan@iotashan.com";
+			REQUEST.supportEmail = "customerservice@email.com";
 			// change this to your URL. Defaulted to the root of whatever the URL called is
 			REQUEST.siteURL = "http://" & CGI.SERVER_NAME & "/";
 		</cfscript>
