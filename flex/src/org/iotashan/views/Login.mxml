@@ -49,23 +49,13 @@
 				inputEmail.setFocus();
 			}
 			
-			public function accountNotActivated(tmpUser:User):void {
+			public function accountNotActivated(e:AccountEvent):void {
 				// hold on to this inactive user, in case we want to resend activation.
-				inactiveUser = tmpUser;
+				inactiveUser = e.user;
 				// clear out the password
 				clearPassword();
 				// ask the user if they want the activation code again
 				Alert.show("Your account has not yet been activated. Do you need the activation email resent?","Error",Alert.YES|Alert.NO,null,resendActivation);
-			}
-			
-			private function accountActivated(val:Object):void {
-				var ret:Boolean = val as Boolean;
-				
-				if (ret) {
-					Alert.show("Your account has been activated. You can now log in.","Account Activated");
-				} else {
-					Alert.show("This verification code has already been used. You may want to try to logging in.","Error");
-				}
 			}
 			
 			private function clearPassword():void {
