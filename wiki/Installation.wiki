@@ -1,8 +1,8 @@
 #summary Installation instructions
 
-= Installation Instructions =
+= Installation =
 
- # Connect your favorite SVN client to http://cf-flex-user-auth.googlecode.com/svn/trunk/ then check out the trunk as a new project in your workspace.
+ # Connect your favorite SVN client to http://cf-flex-user-auth.googlecode.com/svn/trunk/ then *export* the trunk as a new project in your workspace. Doing an export will get all the files without any of the links back to the SVN repository.
  # Set up a virtual host using apache to point to /cf-flex-user-auth/wwwroot
 {{{
 <VirtualHost *:80>
